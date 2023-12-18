@@ -1,0 +1,25 @@
+{
+    "Name": "Pop.Template",
+    "Description": "",
+    "Version": "0.0.1",
+    "LoadPriority": 1,
+    "ConVars": [
+
+    ],
+    "Scripts": [
+        {
+        "Path": "template.gnut",
+        "RunOn" : "(SERVER || CLIENT) && MP",
+        "ClientCallback": {
+                "Before" : "Template"
+            },
+        "ServerCallback": {
+            "Before" : "Template",
+            "After" : "Template"
+            }
+        }
+    ],
+    "Localisation": [
+        "resources/localisation_%language%.txt"
+    ]
+}
