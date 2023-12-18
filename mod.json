@@ -1,6 +1,6 @@
 {
-    "Name": "Pop.Template",
-    "Description": "",
+    "Name": "Pop.ThinkingWithPortals",
+    "Description": "Portals - Now in Titanfall 2",
     "Version": "0.0.1",
     "LoadPriority": 1,
     "ConVars": [
