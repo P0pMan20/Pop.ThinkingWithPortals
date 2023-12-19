@@ -3,6 +3,7 @@
 Have you ever thought / wanted more freedom with your movement in TF2 - Have you ever wanted portals? Well I have!
 
 [![IMAGE ALT TEXT](http://img.youtube.com/vi/BeTvu1JtFeQ/0.jpg)](http://www.youtube.com/watch?v=BeTvu1JtFeQ "Preliminary showcase of portal mod for my mates Titanfall 2 | Northstar")
+Youtube Video
 
 [x] - Basic Portals
 [x] - fixed clipping into the objects/ground
