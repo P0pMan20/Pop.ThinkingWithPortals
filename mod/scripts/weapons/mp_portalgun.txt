@@ -1,0 +1,45 @@
+WeaponData
+{
+	// General
+	"printname"   									"#WPN_CAR"
+	"shortprintname"   								"Portal Gun"
+	"description" 									"thonk"
+	"longdesc"										"#WPN_CAR_LONGDESC"
+
+	"menu_icon"										"r2_ui/menus/loadout_icons/primary_weapon/primary_car"
+	"hud_icon"										"r2_ui/menus/loadout_icons/primary_weapon/primary_car"
+
+	"weaponClass" 									"human"
+	"body_type"										"light"
+	"fire_mode"   									"semi-auto"
+	"pickup_hold_prompt"  							"Hold [USE] [WEAPONNAME]"
+	"pickup_press_prompt" 							"[USE] [WEAPONNAME]"
+
+	// Models
+	"viewmodel"   									"models/weapons/car101/ptpov_car101.mdl"
+	"playermodel" 									"models/weapons/car101/w_car101.mdl"
+	"holstermodel"									"models/weapons/car101/w_car101.mdl"
+    
+    // Behavior
+	"fire_rate"   									"16"
+	"zoom_time_in"									"0.0"
+	"zoom_time_out"   								"0.0"
+	"zoom_fov"										"69" // no zoom?
+	"ammo_min_to_fire"								"1"
+	"ammo_clip_size"								"1000"
+	"ammo_no_remove_from_stockpile"					"1"
+	"ammo_no_remove_from_clip"					    "1"
+	"holster_time"									"0.0"
+	"deploy_time" 									"0.0"
+	"lower_time"  									"0.0"
+	"raise_time"  									"0.0"
+	"primary_fire_does_not_block_sprint"			"1"
+	"crosshair_force_sprint_fade_disabled"          "1"
+	"raise_from_sprint_time"						"0.0"
+	"ads_move_speed_scale"							"1"
+    // left - blue portal
+    "OnWeaponPrimaryAttack" "BluePortal"
+    // right - orange portal 
+    "OnWeaponStartZoomIn" "OrangePortal"
+
+}

@@ -8,14 +8,13 @@
     ],
     "Scripts": [
         {
-        "Path": "template.gnut",
+        "Path": "mp_portalgun.gnut",
         "RunOn" : "(SERVER || CLIENT) && MP",
         "ClientCallback": {
-                "Before" : "Template"
+                "Before" : "initPortalMod"
             },
         "ServerCallback": {
-            "Before" : "Template",
-            "After" : "Template"
+            "Before" : "initPortalMod"
             }
         }
     ],

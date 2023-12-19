@@ -1,0 +1,63 @@
+global function initPortalMod
+global function BluePortal
+global function OrangePortal
+
+void function initPortalMod(){
+    PrecacheWeapon("mp_portalgun")
+    SetConVarBool("enable_debug_overlays", true)
+    #if SERVER
+        AddCallback_OnReceivedSayTextMessage(Granter)
+        PortalCollisionHandler()
+    #endif
+}
+
+#if SERVER
+// granting portal gun temporary fix
+ClServer_MessageStruct function Granter(ClServer_MessageStruct message){
+    if (message.message.find("giv") != null){
+        string weaponToReplaceName = message.player.GetLatestPrimaryWeapon().GetWeaponClassName()
+        
+        message.player.TakeWeaponNow(weaponToReplaceName)
+        message.player.GiveWeapon("mp_portalgun")
+        message.player.SetActiveWeaponByName("mp_portalgun")
+    }
+    return message
+}
+#endif
+
+void function PortalCollisionHandler(){
+    a
+}
+
+
+
+
+var function BluePortal(entity weapon, WeaponPrimaryAttackParams attackParams){
+    // attackParams.pos attackParams.dir return the same as the corresponding function
+    vector direction = weapon.GetAttackDirection()
+    vector position = weapon.GetAttackPosition()
+    int rangeOfPortalGun = 1000
+    vector endOfCheck = (rangeOfPortalGun * direction) + position
+    print("blue")
+    print("dir " + direction + "pos " + position)
+    TraceResults hitChecker = TraceLine(position, endOfCheck)
+    print("trace endpos " +  hitChecker.endPos)
+    DebugDrawSphere(hitChecker.endPos, 10, 0, 94, 255, true, 20.0)
+    DebugDrawLine(position, hitChecker.endPos, 0, 94, 255, true, 20.0)
+    
+    
+    return 1
+}
+
+void function OrangePortal(entity weapon){
+    vector direction = weapon.GetAttackDirection()
+    vector position = weapon.GetAttackPosition()
+    int rangeOfPortalGun = 1000
+    vector endOfCheck = (rangeOfPortalGun * direction) + position
+    print("orange")
+    print("dir " + direction + "pos " + position)
+    TraceResults hitChecker = TraceLine(position, endOfCheck)
+    print("trace endpos " +  hitChecker.endPos)
+    DebugDrawLine(position, hitChecker.endPos, 255, 191, 0, false, 20.0)
+        
+}
