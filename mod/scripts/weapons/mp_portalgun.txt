@@ -42,4 +42,14 @@ WeaponData
     // right - orange portal 
     "OnWeaponStartZoomIn" "OrangePortal"
 
+
+    RUI_CrosshairData
+    {
+        Crosshair_1
+        {
+            "ui"                        "ui/crosshair_circle2_small"
+            "base_spread"               "3.0"   
+        }
+    }
+
 }

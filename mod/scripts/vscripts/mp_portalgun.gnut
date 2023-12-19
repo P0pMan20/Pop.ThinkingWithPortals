@@ -1,14 +1,48 @@
+untyped
 global function initPortalMod
 global function BluePortal
 global function OrangePortal
 
+// owned player, pos  , isBlue
+//array<entity, vector, bool>
+// array< array<entity, vector, bool> > PortalList
+array< array > PortalList
+// player blue pos orange pos
+// table<entity, array<vector, vector>> PortalsByPlayer
+table<entity, array > PortalsByPlayer
 void function initPortalMod(){
     PrecacheWeapon("mp_portalgun")
     SetConVarBool("enable_debug_overlays", true)
     #if SERVER
         AddCallback_OnReceivedSayTextMessage(Granter)
         PortalCollisionHandler()
+        AddCallback_OnClientConnected(InitaliseListsAndShit)
     #endif
+}
+
+void function InitaliseListsAndShit(entity player){
+    vector farAway = <10000,10000,10000>
+    PortalsByPlayer[player]<- [farAway, farAway]
+}
+
+float function vec_distance(vector vec1, vector vec2){
+    return sqrt(pow((vec2.x-vec1.x),2) + pow((vec2.y-vec1.y),2) + pow((vec2.z-vec1.z),2))
+}
+
+void function SpawnPortal(entity owner, vector position, bool isBlue){
+    if (isBlue){
+        PortalsByPlayer[owner][0] = position
+    } else {
+        PortalsByPlayer[owner][1] = position
+    }
+    // array<array<entity, vector, bool>> NewPortalList
+    array< array > NewPortalList
+    array<entity> players = GetPlayerArray()
+    
+    foreach(entity player in players){
+        NewPortalList.append([owner, position, isBlue])
+    }
+    PortalList = NewPortalList
 }
 
 #if SERVER
@@ -26,7 +60,32 @@ ClServer_MessageStruct function Granter(ClServer_MessageStruct message){
 #endif
 
 void function PortalCollisionHandler(){
-    a
+    thread CollideChecker(0.0001)
+}
+
+void function CollideChecker(float delay){
+    while (true){
+        array<entity> players = GetPlayerArray()
+        // foreach(array<entity, vector, bool> Portal in PortalList){
+        foreach(array Portal in PortalList){
+            // owned player, pos  , isBlue
+            foreach(entity player in players){
+                vector playerPosition = player.GetOrigin()
+                if (vec_distance(playerPosition, expect vector(Portal[1])) < 100){
+                    if (expect bool(Portal[2])){
+                        player.SetOrigin(PortalsByPlayer[expect entity(Portal[0])][1])
+                    } else {
+                        player.SetOrigin(PortalsByPlayer[expect entity(Portal[0])][0])
+
+                    }
+                }
+                
+
+            }
+        }
+        wait delay
+    }
+
 }
 
 
@@ -40,10 +99,13 @@ var function BluePortal(entity weapon, WeaponPrimaryAttackParams attackParams){
     vector endOfCheck = (rangeOfPortalGun * direction) + position
     print("blue")
     print("dir " + direction + "pos " + position)
-    TraceResults hitChecker = TraceLine(position, endOfCheck)
+    TraceResults hitChecker = TraceLineHighDetail(position, endOfCheck)
     print("trace endpos " +  hitChecker.endPos)
     DebugDrawSphere(hitChecker.endPos, 10, 0, 94, 255, true, 20.0)
     DebugDrawLine(position, hitChecker.endPos, 0, 94, 255, true, 20.0)
+    #if SERVER
+        SpawnPortal(weapon.GetWeaponOwner(), hitChecker.endPos + hitChecker.surfaceNormal * 20, true)
+    #endif
     
     
     return 1
@@ -56,8 +118,10 @@ void function OrangePortal(entity weapon){
     vector endOfCheck = (rangeOfPortalGun * direction) + position
     print("orange")
     print("dir " + direction + "pos " + position)
-    TraceResults hitChecker = TraceLine(position, endOfCheck)
+    TraceResults hitChecker = TraceLineHighDetail(position, endOfCheck)
     print("trace endpos " +  hitChecker.endPos)
     DebugDrawLine(position, hitChecker.endPos, 255, 191, 0, false, 20.0)
-        
+    #if SERVER
+        SpawnPortal(weapon.GetWeaponOwner(), hitChecker.endPos + hitChecker.surfaceNormal * 20, false)
+    #endif
 }
