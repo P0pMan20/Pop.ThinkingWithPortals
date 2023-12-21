@@ -1,0 +1,14 @@
+global table Colours
+global function vec_distance
+global function midaf
+
+void function midaf(){
+    print("mid loaded")
+}
+
+
+
+float function vec_distance(vector vec1, vector vec2){
+    return sqrt(pow((vec2.x-vec1.x),2) + pow((vec2.y-vec1.y),2) + pow((vec2.z-vec1.z),2))
+}
+

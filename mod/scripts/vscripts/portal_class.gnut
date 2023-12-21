@@ -1,0 +1,26 @@
+// needed stuff
+// enabled, location, owner, portalvisible entity, colour
+// constructor location?
+
+// classes are passed by reference right?
+
+untyped
+global var Portal
+global function initPortalClass
+
+
+void function initPortalClass(){
+    class Portal {
+        //bool
+        enabled = false
+        //vector
+        location = <0,0,0>
+        // entity
+        owner = null
+        displayEntity = null
+        //int
+        colour = null
+    }
+}
+
+

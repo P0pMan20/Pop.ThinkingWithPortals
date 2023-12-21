@@ -10,8 +10,21 @@ array< array > PortalList
 // player blue pos orange pos
 // table<entity, array<vector, vector>> PortalsByPlayer
 table<entity, array > PortalsByPlayer
+
+int spark
+int arc
+
+table<string, int> Colours = {
+    Blue = 1,
+    Orange = 2
+}
+
 void function initPortalMod(){
     PrecacheWeapon("mp_portalgun")
+    PrecacheParticleSystem($"runway_light_red")
+    PrecacheParticleSystem($"runway_light_blue")
+    spark = GetParticleSystemIndex($"runway_light_red")
+    arc = GetParticleSystemIndex($"runway_light_blue" )
     SetConVarBool("enable_debug_overlays", true)
     #if SERVER
         AddCallback_OnReceivedSayTextMessage(Granter)
@@ -25,9 +38,6 @@ void function InitaliseListsAndShit(entity player){
     PortalsByPlayer[player]<- [farAway, farAway]
 }
 
-float function vec_distance(vector vec1, vector vec2){
-    return sqrt(pow((vec2.x-vec1.x),2) + pow((vec2.y-vec1.y),2) + pow((vec2.z-vec1.z),2))
-}
 
 void function SpawnPortal(entity owner, vector position, bool isBlue){
     if (isBlue){
@@ -89,39 +99,41 @@ void function CollideChecker(float delay){
 }
 
 
-
-
-var function BluePortal(entity weapon, WeaponPrimaryAttackParams attackParams){
+void function CleanerPortal(entity weapon, int colour)
+{
     // attackParams.pos attackParams.dir return the same as the corresponding function
     vector direction = weapon.GetAttackDirection()
     vector position = weapon.GetAttackPosition()
     int rangeOfPortalGun = 1000
     vector endOfCheck = (rangeOfPortalGun * direction) + position
-    print("blue")
-    print("dir " + direction + "pos " + position)
+    // print("blue")
+    // print("dir " + direction + "pos " + position)
     TraceResults hitChecker = TraceLineHighDetail(position, endOfCheck)
-    print("trace endpos " +  hitChecker.endPos)
+    // print("trace endpos " +  hitChecker.endPos)
     DebugDrawSphere(hitChecker.endPos, 10, 0, 94, 255, true, 20.0)
     DebugDrawLine(position, hitChecker.endPos, 0, 94, 255, true, 20.0)
-    #if SERVER
-        SpawnPortal(weapon.GetWeaponOwner(), hitChecker.endPos + hitChecker.surfaceNormal * 20, true)
-    #endif
+    switch (colour){
+        case Colours.Blue:
+            #if SERVER
+                SpawnPortal(weapon.GetWeaponOwner(), hitChecker.endPos + hitChecker.surfaceNormal * 20, true)
+            #endif
+            StartParticleEffectInWorld(arc, hitChecker.endPos + hitChecker.surfaceNormal * 20 ,<0,0,0>)          
+        case Colours.Orange:
+            #if SERVER
+                SpawnPortal(weapon.GetWeaponOwner(), hitChecker.endPos + hitChecker.surfaceNormal * 20, false)
+            #endif
+            StartParticleEffectInWorld(spark, hitChecker.endPos + hitChecker.surfaceNormal * 20 ,<0,0,0>)               
+    }
+
     
-    
+}
+
+var function BluePortal(entity weapon, WeaponPrimaryAttackParams attackParams){
+    // attackParams.pos attackParams.dir return the same as the corresponding function
+    CleanerPortal(weapon, Colours.Blue)
     return 1
 }
 
 void function OrangePortal(entity weapon){
-    vector direction = weapon.GetAttackDirection()
-    vector position = weapon.GetAttackPosition()
-    int rangeOfPortalGun = 1000
-    vector endOfCheck = (rangeOfPortalGun * direction) + position
-    print("orange")
-    print("dir " + direction + "pos " + position)
-    TraceResults hitChecker = TraceLineHighDetail(position, endOfCheck)
-    print("trace endpos " +  hitChecker.endPos)
-    DebugDrawLine(position, hitChecker.endPos, 255, 191, 0, false, 20.0)
-    #if SERVER
-        SpawnPortal(weapon.GetWeaponOwner(), hitChecker.endPos + hitChecker.surfaceNormal * 20, false)
-    #endif
+    CleanerPortal(weapon, Colours.Orange)
 }

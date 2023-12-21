@@ -8,15 +8,36 @@
     ],
     "Scripts": [
         {
+            "Path": "util.gnut",
+            "RunOn" : "(SERVER || CLIENT) && MP",
+            "ClientCallback": {
+                "Before" : "midaf"
+            },
+            "ServerCallback": {
+                "Before" : "midaf"
+            }
+        },
+        {
+            "Path": "portal_class.gnut",
+            "RunOn" : "(SERVER || CLIENT) && MP",
+            "ClientCallback": {
+                "Before" : "initPortalClass"
+            },
+            "ServerCallback": {
+                "Before" : "initPortalClass"
+            }
+        },
+        {
         "Path": "mp_portalgun.gnut",
         "RunOn" : "(SERVER || CLIENT) && MP",
         "ClientCallback": {
-                "Before" : "initPortalMod"
+            "Before" : "initPortalMod"
             },
         "ServerCallback": {
-            "Before" : "initPortalMod"
+                "Before" : "initPortalMod"
             }
-        }
+        },
+
     ],
     "Localisation": [
         "resources/localisation_%language%.txt"
