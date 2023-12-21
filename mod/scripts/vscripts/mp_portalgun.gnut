@@ -117,12 +117,14 @@ void function CleanerPortal(entity weapon, int colour)
             #if SERVER
                 SpawnPortal(weapon.GetWeaponOwner(), hitChecker.endPos + hitChecker.surfaceNormal * 20, true)
             #endif
-            StartParticleEffectInWorld(arc, hitChecker.endPos + hitChecker.surfaceNormal * 20 ,<0,0,0>)          
+            StartParticleEffectInWorld(arc, hitChecker.endPos + hitChecker.surfaceNormal * 20 ,<0,0,0>)
+            break
         case Colours.Orange:
             #if SERVER
                 SpawnPortal(weapon.GetWeaponOwner(), hitChecker.endPos + hitChecker.surfaceNormal * 20, false)
             #endif
-            StartParticleEffectInWorld(spark, hitChecker.endPos + hitChecker.surfaceNormal * 20 ,<0,0,0>)               
+            StartParticleEffectInWorld(spark, hitChecker.endPos + hitChecker.surfaceNormal * 20 ,<0,0,0>)
+            break    
     }
 
     
